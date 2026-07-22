@@ -1,0 +1,192 @@
+/* ============================================================
+   BaitCheck admin theme override for GoPhish.
+   Appended to the END of the real gophish.css — later rules win
+   in the CSS cascade, so this recolors the existing, working UI
+   without touching any original layout/functionality rules.
+   Uses !important selectively where Bootstrap 3's own specificity
+   would otherwise win.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --bc-navy:#0B2545;
+  --bc-sidebar:#0E2D54;
+  --bc-card-dark:#12315C;
+  --bc-steel:#185FA5;
+  --bc-amber:#F2A93B;
+  --bc-ice:#CADCFC;
+  --bc-surface:#F4F7FB;
+  --bc-ink:#16233A;
+  --bc-mute:#5B6B7C;
+  --bc-border:#E2E8F0;
+}
+
+body{
+  font-family:'Inter', Arial, sans-serif !important;
+  background:var(--bc-surface) !important;
+  color:var(--bc-ink) !important;
+}
+h1, h2, h3, h4, .page-header{
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+  color:var(--bc-navy) !important;
+}
+
+/* Top navbar */
+.navbar-inverse,
+.navbar-inverse .navbar-header,
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .container-fluid{
+  background-color:var(--bc-navy) !important;
+  background-image:none !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+.navbar-inverse{
+  border-bottom:none !important;
+}
+.navbar-inverse .navbar-toggle{
+  border-color:var(--bc-card-dark) !important;
+}
+.navbar-inverse .navbar-toggle .icon-bar{
+  background-color:#fff !important;
+}
+.navbar-inverse .navbar-brand{
+  color:#fff !important;
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+  font-weight:700 !important;
+}
+
+/* Force an explicit, known navbar height and match body's offset to it
+   exactly — the gap was almost certainly a mismatch between the navbar's
+   actual rendered height and whatever fixed padding-top the original
+   theme assumed. Defining both sides ourselves removes the guesswork. */
+.navbar-inverse{
+  min-height:60px !important;
+  height:60px !important;
+}
+.navbar-inverse .navbar-header,
+.navbar-inverse .navbar-brand{
+  min-height:60px !important;
+  line-height:60px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+.navbar-logo{
+  vertical-align:middle !important;
+}
+body{
+  padding-top:60px !important;
+}
+.navbar-inverse .btn-primary{
+  background-color:var(--bc-card-dark) !important;
+  border-color:var(--bc-card-dark) !important;
+  color:var(--bc-ice) !important;
+}
+.navbar-inverse .btn-primary:hover{
+  background-color:var(--bc-steel) !important;
+  color:#fff !important;
+}
+
+/* The row/container that wraps the sidebar sits between the fixed navbar
+   and the sidebar's own background — force it navy too so nothing shows
+   through in that gap regardless of which specific div is responsible. */
+.container-fluid, .container-fluid > .row{
+  background-color:var(--bc-sidebar) !important;
+}
+
+/* Sidebar */
+.sidebar{
+  background-color:var(--bc-sidebar) !important;
+  padding-top:20px !important;
+}
+.nav-sidebar > li > a{
+  color:var(--bc-ice) !important;
+  font-weight:500 !important;
+  border-left:3px solid transparent !important;
+}
+.nav-sidebar > li > a:hover{
+  background-color:rgba(255,255,255,0.04) !important;
+  color:#fff !important;
+}
+.nav-sidebar > li.active > a,
+.nav-sidebar > li.active > a:hover{
+  background-color:var(--bc-card-dark) !important;
+  color:#fff !important;
+  border-left-color:var(--bc-amber) !important;
+}
+.sidebar .nav-badge{
+  background-color:var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+  font-weight:700 !important;
+}
+
+/* Buttons */
+.btn-primary{
+  background-color:var(--bc-amber) !important;
+  border-color:var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+  font-weight:600 !important;
+}
+.btn-primary:hover, .btn-primary:focus{
+  background-color:#e0982c !important;
+  border-color:#e0982c !important;
+  color:var(--bc-navy) !important;
+}
+.btn-default{
+  background-color:#fff !important;
+  border-color:var(--bc-border) !important;
+  color:var(--bc-mute) !important;
+}
+
+/* Tables (DataTables) */
+table.dataTable thead th{
+  background-color:var(--bc-navy) !important;
+  color:#fff !important;
+  border-bottom:none !important;
+}
+table.dataTable tbody tr:hover{
+  background-color:var(--bc-surface) !important;
+}
+.dataTables_wrapper .pagination > li > a{
+  color:var(--bc-steel) !important;
+}
+.dataTables_wrapper .pagination > .active > a{
+  background-color:var(--bc-steel) !important;
+  border-color:var(--bc-steel) !important;
+}
+
+/* Modals */
+.modal-content{
+  border-radius:10px !important;
+  border:none !important;
+}
+.modal-header{
+  border-bottom:1px solid var(--bc-border) !important;
+}
+.modal-title{
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+  color:var(--bc-navy) !important;
+}
+.modal-footer{
+  border-top:1px solid var(--bc-border) !important;
+}
+
+/* Form controls */
+.form-control:focus{
+  border-color:var(--bc-steel) !important;
+  box-shadow:0 0 0 3px rgba(24,95,165,0.12) !important;
+}
+.checkbox-primary input[type="checkbox"]:checked + label::before{
+  background-color:var(--bc-steel) !important;
+  border-color:var(--bc-steel) !important;
+}
+
+/* Panels / wells / cards used throughout the app */
+.panel-default > .panel-heading{
+  background-color:var(--bc-navy) !important;
+  color:#fff !important;
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+}
+a{color:var(--bc-steel) !important;}
+a:hover{color:var(--bc-navy) !important;}
