@@ -19,5 +19,11 @@
 	"logging": {
 		"filename": "",
 		"level": ""
+	},
+	"theme": {
+		"primary_color": "#222222",
+		"sidebar_color": "#283F50",
+		"font_family": "'Source Sans Pro', Helvetica, Arial, sans-serif",
+		"logo_url": "/images/logo_inv_small.png"
 	}
 }

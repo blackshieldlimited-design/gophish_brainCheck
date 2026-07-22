@@ -179,6 +179,7 @@ type templateParams struct {
 	Token        string
 	Version      string
 	ModifySystem bool
+	Theme        config.Theme
 }
 
 // newTemplateParams returns the default template parameters for a user and
@@ -193,6 +194,7 @@ func newTemplateParams(r *http.Request) templateParams {
 		ModifySystem: modifySystem,
 		Version:      config.Version,
 		Flashes:      session.Flashes(),
+		Theme:        config.CurrentTheme,
 	}
 }
 
@@ -314,7 +316,8 @@ func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request
 		Title   string
 		Flashes []interface{}
 		Token   string
-	}{Title: "Login", Token: csrf.Token(r)}
+		Theme   config.Theme
+	}{Title: "Login", Token: csrf.Token(r), Theme: config.CurrentTheme}
 	params.Flashes = session.Flashes()
 	session.Save(r, w)
 	templates := template.New("template")
@@ -360,7 +363,8 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		Title   string
 		Flashes []interface{}
 		Token   string
-	}{Title: "Login", Token: csrf.Token(r)}
+		Theme   config.Theme
+	}{Title: "Login", Token: csrf.Token(r), Theme: config.CurrentTheme}
 	session := ctx.Get(r, "session").(*sessions.Session)
 	switch {
 	case r.Method == "GET":

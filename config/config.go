@@ -37,10 +37,54 @@ type Config struct {
 	TestFlag       bool        `json:"test_flag"`
 	ContactAddress string      `json:"contact_address"`
 	Logging        *log.Config `json:"logging"`
+	Theme          Theme       `json:"theme"`
+}
+
+// Theme represents the customizable branding options for the admin
+// dashboard. Any field left blank in config.json falls back to the
+// default Gophish look, set by applyThemeDefaults.
+type Theme struct {
+	PrimaryColor string `json:"primary_color"`
+	SidebarColor string `json:"sidebar_color"`
+	FontFamily   string `json:"font_family"`
+	LogoURL      string `json:"logo_url"`
+}
+
+// defaultTheme matches the colors, font, and logo Gophish has always
+// shipped with, so installs that don't set a "theme" block in
+// config.json are unaffected.
+var defaultTheme = Theme{
+	PrimaryColor: "#222222",
+	SidebarColor: "#283F50",
+	FontFamily:   "'Source Sans Pro', Helvetica, Arial, sans-serif",
+	LogoURL:      "/images/logo_inv_small.png",
+}
+
+// applyThemeDefaults fills in any Theme fields left blank in config.json
+// with Gophish's default branding.
+func applyThemeDefaults(t Theme) Theme {
+	if t.PrimaryColor == "" {
+		t.PrimaryColor = defaultTheme.PrimaryColor
+	}
+	if t.SidebarColor == "" {
+		t.SidebarColor = defaultTheme.SidebarColor
+	}
+	if t.FontFamily == "" {
+		t.FontFamily = defaultTheme.FontFamily
+	}
+	if t.LogoURL == "" {
+		t.LogoURL = defaultTheme.LogoURL
+	}
+	return t
 }
 
 // Version contains the current gophish version
 var Version = ""
+
+// CurrentTheme holds the active admin dashboard theme, set from the loaded
+// Config in gophish.go so that it's accessible when building template
+// parameters (mirroring the Version variable above).
+var CurrentTheme = defaultTheme
 
 // ServerName is the server type that is returned in the transparency response.
 const ServerName = "gophish"
@@ -64,5 +108,6 @@ func LoadConfig(filepath string) (*Config, error) {
 	config.MigrationsPath = config.MigrationsPath + config.DBName
 	// Explicitly set the TestFlag to false to prevent config.json overrides
 	config.TestFlag = false
+	config.Theme = applyThemeDefaults(config.Theme)
 	return config, nil
 }

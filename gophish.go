@@ -81,6 +81,7 @@ func main() {
 		log.Warnf("Please consider adding a contact_address entry in your config.json")
 	}
 	config.Version = string(version)
+	config.CurrentTheme = conf.Theme
 
 	// Configure our various upstream clients to make sure that we restrict
 	// outbound connections as needed.
