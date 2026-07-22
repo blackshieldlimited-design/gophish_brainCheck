@@ -48,6 +48,7 @@ type Theme struct {
 	SidebarColor string `json:"sidebar_color"`
 	FontFamily   string `json:"font_family"`
 	LogoURL      string `json:"logo_url"`
+	BrandName    string `json:"brand_name"`
 }
 
 // defaultTheme matches the colors, font, and logo Gophish has always
@@ -58,6 +59,7 @@ var defaultTheme = Theme{
 	SidebarColor: "#283F50",
 	FontFamily:   "'Source Sans Pro', Helvetica, Arial, sans-serif",
 	LogoURL:      "/images/logo_inv_small.png",
+	BrandName:    "gophish",
 }
 
 // applyThemeDefaults fills in any Theme fields left blank in config.json
@@ -74,6 +76,9 @@ func applyThemeDefaults(t Theme) Theme {
 	}
 	if t.LogoURL == "" {
 		t.LogoURL = defaultTheme.LogoURL
+	}
+	if t.BrandName == "" {
+		t.BrandName = defaultTheme.BrandName
 	}
 	return t
 }

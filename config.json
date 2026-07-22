@@ -24,6 +24,7 @@
 		"primary_color": "#6f42c1",
 		"sidebar_color": "#4b2e83",
 		"font_family": "'Roboto', sans-serif",
-		"logo_url": "/images/logo_purple.png"
+		"logo_url": "/images/logo_purple.png",
+		"brand_name": "AegisIntel"
 	}
 }

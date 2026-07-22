@@ -135,11 +135,11 @@ footer>p {
 }
 
 .sidebar a {
-    color: #201e1c;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .sidebar a:hover {
-    color: #201e1c;
+    color: #fff;
 }
 
 .api_heading {
@@ -721,7 +721,7 @@ table.dataTable {
 
 .nav-sidebar>li.active>a:focus,
 .nav-sidebar>li.active>a:hover {
-    background-color: #37485a;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .nav-badge {

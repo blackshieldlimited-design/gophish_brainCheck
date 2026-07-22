@@ -1,38 +1,98 @@
-/* ============================================================
-   BaitCheck admin theme override for GoPhish.
-   Appended to the END of the real gophish.css — later rules win
-   in the CSS cascade, so this recolors the existing, working UI
-   without touching any original layout/functionality rules.
-   Uses !important selectively where Bootstrap 3's own specificity
-   would otherwise win.
-   ============================================================ */
+/* ================================================================
+   BaitCheck Modern Admin Theme — GoPhish override
+   ------------------------------------------------------------
+   Appended to the END of the real gophish.css. Nothing here removes
+   or edits the original file — later rules simply win the cascade,
+   so all original layout/functionality is untouched underneath.
+   !important is used selectively, only where Bootstrap 3's own
+   specificity would otherwise win.
+
+   Organised in six sections:
+     1. Variables
+     2. Typography & Spacing
+     3. Navbar & Sidebar
+     4. Cards & Containers
+     5. Buttons & Badges
+     6. Data Tables
+   ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap');
 
+/* ---------------------------------------------------------------
+   1. VARIABLES
+   BaitCheck's established palette — kept consistent with the logo,
+   website, and pitch materials rather than a new ad-hoc scheme.
+   --------------------------------------------------------------- */
 :root{
-  --bc-navy:#0B2545;
-  --bc-sidebar:#0E2D54;
-  --bc-card-dark:#12315C;
-  --bc-steel:#185FA5;
-  --bc-amber:#F2A93B;
-  --bc-ice:#CADCFC;
-  --bc-surface:#F4F7FB;
-  --bc-ink:#16233A;
-  --bc-mute:#5B6B7C;
-  --bc-border:#E2E8F0;
+  --bc-navy:#0B2545;      /* deep primary — navbar, sidebar, headers */
+  --bc-sidebar:#0B2545;   /* intentionally == --bc-navy: makes any
+                             sub-pixel seam between adjacent elements
+                             invisible, since both sides render the
+                             same color regardless of exact alignment */
+  --bc-card-dark:#12315C; /* secondary dark — active states, panels */
+  --bc-steel:#185FA5;     /* accent — links, focus rings, hover */
+  --bc-amber:#F2A93B;     /* CTA accent — primary buttons, highlights */
+  --bc-ice:#CADCFC;       /* light text on dark backgrounds */
+  --bc-surface:#F4F7FB;   /* page background, hover fills */
+  --bc-ink:#16233A;       /* body text */
+  --bc-mute:#5B6B7C;      /* secondary text */
+  --bc-border:#E2E8F0;    /* hairline dividers */
+
+  /* GoPhish's own page templates define --primary-color / --sidebar-color
+     (a purple scheme) inline — redefine them here too, in case any
+     original CSS we haven't explicitly overridden references them
+     directly. Our appended stylesheet loads last, so this wins. */
+  --primary-color:#F2A93B;
+  --sidebar-color:#0B2545;
+  --font-family:'Inter', system-ui, sans-serif;
+
+  /* Soft, semi-transparent status tones for badges/labels — pastel
+     fills with high-contrast text, not solid legacy Bootstrap colors */
+  --bc-success-bg:rgba(31,138,92,0.12);
+  --bc-success-text:#166942;
+  --bc-danger-bg:rgba(192,80,63,0.12);
+  --bc-danger-text:#9c3f30;
+  --bc-warning-bg:rgba(242,169,59,0.16);
+  --bc-warning-text:#8a5c14;
+  --bc-info-bg:rgba(24,95,165,0.12);
+  --bc-info-text:#0f4675;
 }
 
+/* ---------------------------------------------------------------
+   2. TYPOGRAPHY & SPACING
+   --------------------------------------------------------------- */
 body{
-  font-family:'Inter', Arial, sans-serif !important;
+  font-family:'Inter', system-ui, -apple-system, "Segoe UI", Arial, sans-serif !important;
   background:var(--bc-surface) !important;
   color:var(--bc-ink) !important;
+  line-height:1.6 !important;
 }
 h1, h2, h3, h4, .page-header{
   font-family:'Space Grotesk', Arial, sans-serif !important;
   color:var(--bc-navy) !important;
 }
+.page-header{
+  font-size:24px !important;
+  font-weight:700 !important;
+  line-height:1.3 !important;
+  padding-bottom:14px !important;
+  margin:0 0 24px !important;
+  border-bottom:1px solid var(--bc-border) !important;
+  letter-spacing:-0.01em;
+}
+/* Breathing room inside cards and table cells */
+.panel-body, .well, .modal-body{
+  padding:22px 24px !important;
+}
+table.dataTable td, table.dataTable th{
+  padding:14px 20px !important;
+}
 
-/* Top navbar */
+/* ---------------------------------------------------------------
+   3. NAVBAR & SIDEBAR
+   Flat backgrounds, no legacy gradients/shadows, smooth transitions
+   on interactive states.
+   --------------------------------------------------------------- */
 .navbar-inverse,
 .navbar-inverse .navbar-header,
 .navbar-inverse .navbar-collapse,
@@ -44,6 +104,17 @@ h1, h2, h3, h4, .page-header{
 }
 .navbar-inverse{
   border-bottom:none !important;
+  min-height:60px !important;
+}
+.navbar-inverse .navbar-header,
+.navbar-inverse .navbar-brand{
+  min-height:60px !important;
+  line-height:60px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+.navbar-logo{
+  vertical-align:middle !important;
 }
 .navbar-inverse .navbar-toggle{
   border-color:var(--bc-card-dark) !important;
@@ -56,28 +127,6 @@ h1, h2, h3, h4, .page-header{
   font-family:'Space Grotesk', Arial, sans-serif !important;
   font-weight:700 !important;
 }
-
-/* Force an explicit, known navbar height and match body's offset to it
-   exactly — the gap was almost certainly a mismatch between the navbar's
-   actual rendered height and whatever fixed padding-top the original
-   theme assumed. Defining both sides ourselves removes the guesswork. */
-.navbar-inverse{
-  min-height:60px !important;
-  height:60px !important;
-}
-.navbar-inverse .navbar-header,
-.navbar-inverse .navbar-brand{
-  min-height:60px !important;
-  line-height:60px !important;
-  padding-top:0 !important;
-  padding-bottom:0 !important;
-}
-.navbar-logo{
-  vertical-align:middle !important;
-}
-body{
-  padding-top:60px !important;
-}
 .navbar-inverse .btn-primary{
   background-color:var(--bc-card-dark) !important;
   border-color:var(--bc-card-dark) !important;
@@ -88,22 +137,29 @@ body{
   color:#fff !important;
 }
 
-/* The row/container that wraps the sidebar sits between the fixed navbar
-   and the sidebar's own background — force it navy too so nothing shows
-   through in that gap regardless of which specific div is responsible. */
+/* Body offset matched exactly to the navbar's forced height, and the
+   sidebar's own fixed-position offset forced to match too (it doesn't
+   inherit from body padding automatically in this template). */
+body{
+  padding-top:60px !important;
+}
+.sidebar{
+  top:60px !important;
+  background-color:var(--bc-sidebar) !important;
+  padding-top:20px !important;
+}
+/* The wrapper row between the fixed navbar and the sidebar's own
+   background — forced navy too so nothing shows through regardless
+   of which specific div would otherwise be responsible. */
 .container-fluid, .container-fluid > .row{
   background-color:var(--bc-sidebar) !important;
 }
 
-/* Sidebar */
-.sidebar{
-  background-color:var(--bc-sidebar) !important;
-  padding-top:20px !important;
-}
 .nav-sidebar > li > a{
   color:var(--bc-ice) !important;
   font-weight:500 !important;
   border-left:3px solid transparent !important;
+  transition:background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
 }
 .nav-sidebar > li > a:hover{
   background-color:rgba(255,255,255,0.04) !important;
@@ -121,45 +177,31 @@ body{
   font-weight:700 !important;
 }
 
-/* Buttons */
-.btn-primary{
-  background-color:var(--bc-amber) !important;
-  border-color:var(--bc-amber) !important;
-  color:var(--bc-navy) !important;
-  font-weight:600 !important;
-}
-.btn-primary:hover, .btn-primary:focus{
-  background-color:#e0982c !important;
-  border-color:#e0982c !important;
-  color:var(--bc-navy) !important;
-}
-.btn-default{
-  background-color:#fff !important;
-  border-color:var(--bc-border) !important;
-  color:var(--bc-mute) !important;
-}
-
-/* Tables (DataTables) */
-table.dataTable thead th{
+/* ---------------------------------------------------------------
+   4. CARDS & CONTAINERS
+   Flat, rounded, softly-shadowed — panels, wells, and modals.
+   --------------------------------------------------------------- */
+.panel-default > .panel-heading{
   background-color:var(--bc-navy) !important;
   color:#fff !important;
-  border-bottom:none !important;
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+  border-radius:10px 10px 0 0 !important;
 }
-table.dataTable tbody tr:hover{
-  background-color:var(--bc-surface) !important;
+.panel{
+  border:none !important;
+  border-radius:10px !important;
+  box-shadow:0 1px 3px rgba(11,37,69,0.08) !important;
 }
-.dataTables_wrapper .pagination > li > a{
-  color:var(--bc-steel) !important;
+.well{
+  background-color:#fff !important;
+  border:1px solid var(--bc-border) !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
 }
-.dataTables_wrapper .pagination > .active > a{
-  background-color:var(--bc-steel) !important;
-  border-color:var(--bc-steel) !important;
-}
-
-/* Modals */
 .modal-content{
   border-radius:10px !important;
   border:none !important;
+  box-shadow:0 20px 60px rgba(11,37,69,0.25) !important;
 }
 .modal-header{
   border-bottom:1px solid var(--bc-border) !important;
@@ -171,8 +213,11 @@ table.dataTable tbody tr:hover{
 .modal-footer{
   border-top:1px solid var(--bc-border) !important;
 }
-
-/* Form controls */
+.form-control{
+  border-radius:7px !important;
+  border:1px solid var(--bc-border) !important;
+  transition:border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
 .form-control:focus{
   border-color:var(--bc-steel) !important;
   box-shadow:0 0 0 3px rgba(24,95,165,0.12) !important;
@@ -182,11 +227,526 @@ table.dataTable tbody tr:hover{
   border-color:var(--bc-steel) !important;
 }
 
-/* Panels / wells / cards used throughout the app */
-.panel-default > .panel-heading{
-  background-color:var(--bc-navy) !important;
-  color:#fff !important;
-  font-family:'Space Grotesk', Arial, sans-serif !important;
+/* Password-strength meter in the New/Edit User modal */
+#password-strength.progress{
+  height:6px !important;
+  border-radius:999px !important;
+  background-color:var(--bc-border) !important;
+  box-shadow:none !important;
+  overflow:hidden;
+}
+#password-strength-bar.progress-bar{
+  transition:width 0.2s ease, background-color 0.2s ease !important;
+}
+#password-strength-bar.progress-bar-danger{
+  background-color:#C0503F !important;
+}
+#password-strength-bar.progress-bar-warning{
+  background-color:var(--bc-amber) !important;
+}
+#password-strength-bar.progress-bar-success{
+  background-color:#1F8A5C !important;
+}
+#password-strength-description{
+  font-size:12px !important;
+  color:var(--bc-mute) !important;
 }
 a{color:var(--bc-steel) !important;}
 a:hover{color:var(--bc-navy) !important;}
+
+/* Tabs (Active/Archived Campaigns) — flat, clean underline indicator
+   instead of Bootstrap 3's boxed default. */
+.nav-tabs{
+  border-bottom:1px solid var(--bc-border) !important;
+}
+.nav-tabs > li > a{
+  border:none !important;
+  border-radius:0 !important;
+  color:var(--bc-mute) !important;
+  font-weight:600 !important;
+  font-family:'Space Grotesk', sans-serif !important;
+  padding:10px 18px !important;
+  margin-right:4px;
+  background:transparent !important;
+}
+.nav-tabs > li > a:hover{
+  background:var(--bc-surface) !important;
+  border:none !important;
+  color:var(--bc-navy) !important;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus{
+  border:none !important;
+  border-bottom:2px solid var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+  background:transparent !important;
+}
+
+/* Select2 (Bootstrap theme) — used for Template/Landing Page/Sending
+   Profile/Groups dropdowns. Untouched until now; matters a lot since
+   this is the actual data-entry experience on the New Campaign form. */
+.select2-container--bootstrap .select2-selection{
+  border:1px solid var(--bc-border) !important;
+  border-radius:7px !important;
+  min-height:38px !important;
+  box-shadow:none !important;
+}
+.select2-container--bootstrap.select2-container--focus .select2-selection,
+.select2-container--bootstrap.select2-container--open .select2-selection{
+  border-color:var(--bc-steel) !important;
+  box-shadow:0 0 0 3px rgba(24,95,165,0.12) !important;
+}
+.select2-selection__rendered{
+  line-height:36px !important;
+  color:var(--bc-ink) !important;
+}
+.select2-selection__arrow{
+  height:36px !important;
+}
+.select2-selection--multiple .select2-selection__rendered{
+  padding:4px 8px !important;
+}
+.select2-selection__choice{
+  background-color:var(--bc-info-bg) !important;
+  border:none !important;
+  color:var(--bc-steel) !important;
+  border-radius:6px !important;
+  padding:2px 8px !important;
+  font-size:12.5px !important;
+}
+.select2-dropdown{
+  border:1px solid var(--bc-border) !important;
+  border-radius:8px !important;
+  box-shadow:0 4px 16px rgba(11,37,69,0.15) !important;
+  overflow:hidden;
+}
+.select2-results__option--highlighted[aria-selected]{
+  background-color:var(--bc-steel) !important;
+  color:#fff !important;
+}
+.select2-search--dropdown .select2-search__field{
+  border:1px solid var(--bc-border) !important;
+  border-radius:6px !important;
+}
+
+/* Input groups with an attached button (e.g. Sending Profile + Send Test
+   Email) — square off the corners where input meets button so they read
+   as one connected control, not two separately-rounded pieces. */
+.input-group .form-control{
+  border-top-right-radius:0 !important;
+  border-bottom-right-radius:0 !important;
+}
+.input-group-btn .btn{
+  border-top-left-radius:0 !important;
+  border-bottom-left-radius:0 !important;
+  margin:0 !important;
+}
+
+/* Tooltips (the (?) help icons next to URL / Send Emails By) */
+.tooltip-inner{
+  background-color:var(--bc-navy) !important;
+  border-radius:6px !important;
+  font-family:'Inter', sans-serif !important;
+  font-size:12px !important;
+  padding:6px 10px !important;
+}
+.tooltip.top .tooltip-arrow{ border-top-color:var(--bc-navy) !important; }
+.tooltip.right .tooltip-arrow{ border-right-color:var(--bc-navy) !important; }
+.tooltip.bottom .tooltip-arrow{ border-bottom-color:var(--bc-navy) !important; }
+.tooltip.left .tooltip-arrow{ border-left-color:var(--bc-navy) !important; }
+
+/* The New Campaign modal nests most of its labels inside one shared
+   .form-group rather than one each — fixes consistent vertical rhythm
+   regardless of that flat structure. */
+.modal-body label{
+  margin-top:14px !important;
+  margin-bottom:6px !important;
+  font-weight:600 !important;
+  font-size:13px !important;
+  color:var(--bc-ink) !important;
+  display:block;
+}
+.modal-body label:first-of-type{
+  margin-top:0 !important;
+}
+
+/* ---------------------------------------------------------------
+   5. BUTTONS & BADGES
+   Flat, rounded, crisp hover transitions — no legacy glossy
+   gradients. Status badges use soft pastel fills with
+   high-contrast text instead of solid Bootstrap colors.
+   --------------------------------------------------------------- */
+.btn, .btn-lg, .btn-sm{
+  font-family:'Space Grotesk', Arial, sans-serif !important;
+  font-weight:700 !important;
+  font-size:13px !important;
+  letter-spacing:0.2px;
+  padding:9px 18px !important;
+  border-radius:8px !important;
+  border:none !important;
+  box-shadow:0 1px 2px rgba(11,37,69,0.12) !important;
+  transition:transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease !important;
+}
+.btn:hover, .btn-lg:hover, .btn-sm:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(11,37,69,0.18) !important;
+}
+.btn:active, .btn-lg:active, .btn-sm:active{
+  transform:translateY(0);
+  box-shadow:0 1px 2px rgba(11,37,69,0.12) !important;
+}
+.btn .fa, .btn-lg .fa, .btn-sm .fa{
+  margin-right:6px;
+}
+
+.btn-primary{
+  background-color:var(--bc-amber) !important;
+  border-color:var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+}
+.btn-primary:hover, .btn-primary:focus{
+  background-color:#e0982c !important;
+  border-color:#e0982c !important;
+  color:var(--bc-navy) !important;
+}
+.btn-success{
+  background-color:#1F8A5C !important;
+  border-color:#1F8A5C !important;
+  color:#fff !important;
+}
+.btn-success:hover{
+  background-color:#186e49 !important;
+}
+.btn-danger{
+  background-color:#C0503F !important;
+  border-color:#C0503F !important;
+  color:#fff !important;
+}
+.btn-danger:hover{
+  background-color:#a5402f !important;
+}
+.btn-default{
+  background-color:#fff !important;
+  border:1px solid var(--bc-border) !important;
+  color:var(--bc-mute) !important;
+  box-shadow:none !important;
+}
+.btn-default:hover{
+  background-color:var(--bc-surface) !important;
+  box-shadow:none !important;
+  transform:none;
+}
+
+/* Small row-action buttons (edit/reset/delete icons in tables) — these
+   inheriting the same bold solid-fill treatment as big page-level CTAs
+   ("New Campaign" etc.) reads as loud and repetitive at that size.
+   Give them a quieter, soft-tint style instead, colored by intent. */
+.btn-sm{
+  display:inline-block !important;
+  padding:6px 10px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  margin:2px 3px 2px 0 !important;
+  box-shadow:none !important;
+}
+.btn-sm .fa{
+  margin-right:0 !important; /* icon-only buttons — no trailing label to space from */
+}
+.btn-sm:hover{
+  transform:none !important;
+  box-shadow:none !important;
+}
+.btn-sm.btn-primary, .btn-sm.btn-warning{
+  background-color:var(--bc-info-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-steel) !important;
+}
+.btn-sm.btn-primary:hover, .btn-sm.btn-warning:hover{
+  background-color:var(--bc-steel) !important;
+  color:#fff !important;
+}
+.btn-sm.btn-danger{
+  background-color:var(--bc-danger-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-danger-text) !important;
+}
+.btn-sm.btn-danger:hover{
+  background-color:#C0503F !important;
+  color:#fff !important;
+}
+.btn-group{
+  display:inline-flex !important;
+  gap:6px;
+  white-space:nowrap;
+}
+
+/* Row-action buttons on Users & Groups — confirmed via DevTools to be
+   plain .btn (not .btn-sm) inside a ~75px-wide .pull-right container.
+   That narrow width, not a layout bug, is why 3 full-sized buttons wrap
+   onto multiple lines. Target their actual functional classes directly
+   and shrink them enough to genuinely fit. */
+.impersonate_button, .edit_button, .delete_button{
+  display:inline-block !important;
+  padding:5px 8px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  margin:2px 2px 2px 0 !important;
+  min-width:0 !important;
+  box-shadow:none !important;
+}
+.impersonate_button .fa, .edit_button .fa, .delete_button .fa{
+  margin-right:0 !important;
+}
+.btn-warning.impersonate_button{
+  background-color:var(--bc-warning-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-warning-text) !important;
+}
+.btn-warning.impersonate_button:hover{
+  background-color:var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+}
+.btn-primary.edit_button{
+  background-color:var(--bc-info-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-steel) !important;
+}
+.btn-primary.edit_button:hover{
+  background-color:var(--bc-steel) !important;
+  color:#fff !important;
+}
+.btn-danger.delete_button{
+  background-color:var(--bc-danger-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-danger-text) !important;
+}
+.btn-danger.delete_button:hover{
+  background-color:#C0503F !important;
+  color:#fff !important;
+}
+
+/* Badges / labels — soft pastel, not solid legacy fills */
+.badge, .label{
+  font-weight:700 !important;
+  border-radius:999px !important;
+  padding:4px 10px !important;
+  font-size:11px !important;
+  letter-spacing:0.2px;
+}
+.label-success, .badge-success{
+  background-color:var(--bc-success-bg) !important;
+  color:var(--bc-success-text) !important;
+}
+.label-danger, .badge-danger{
+  background-color:var(--bc-danger-bg) !important;
+  color:var(--bc-danger-text) !important;
+}
+.label-warning, .badge-warning{
+  background-color:var(--bc-warning-bg) !important;
+  color:var(--bc-warning-text) !important;
+}
+.label-info, .badge-info, .label-primary{
+  background-color:var(--bc-info-bg) !important;
+  color:var(--bc-info-text) !important;
+}
+.label-default{
+  background-color:var(--bc-surface) !important;
+  color:var(--bc-mute) !important;
+}
+
+/* ---------------------------------------------------------------
+   6. DATA TABLES
+   Clean, borderless columns, soft horizontal dividers only, subtle
+   row-hover — wrapped in a rounded white card (shared across every
+   list page: Campaigns, Templates, Landing Pages, Webhooks, Users).
+   --------------------------------------------------------------- */
+.dataTables_wrapper{
+  background:#fff !important;
+  border-radius:12px !important;
+  box-shadow:0 1px 3px rgba(11,37,69,0.08) !important;
+  padding:20px !important;
+  margin-top:16px;
+}
+table.dataTable{
+  border:none !important;
+  border-collapse:collapse !important;
+}
+table.dataTable th, table.dataTable td{
+  border-left:none !important;
+  border-right:none !important;
+}
+table.dataTable tbody td{
+  border-bottom:1px solid var(--bc-border) !important;
+}
+table.dataTable tbody tr:last-child td{
+  border-bottom:none !important;
+}
+table.dataTable thead th{
+  background-color:var(--bc-sidebar) !important;
+  color:#fff !important;
+  border-bottom:none !important;
+  border-radius:0 !important;
+}
+table.dataTable thead tr:first-child th:first-child{ border-top-left-radius:8px !important; }
+table.dataTable thead tr:first-child th:last-child{ border-top-right-radius:8px !important; }
+table.dataTable tbody tr{
+  transition:background-color 0.12s ease !important;
+}
+table.dataTable tbody tr:hover{
+  background-color:var(--bc-surface) !important;
+}
+
+/* Row-action buttons, generalized. Confirmed via real DOM that different
+   pages use different class conventions for the exact same pattern:
+   Users page tags them .impersonate_button/.edit_button/.delete_button,
+   but Sending Profiles, Landing Pages, Templates, and Groups all just use
+   plain .btn-primary/.btn-danger with no special naming — meaning a
+   name-specific rule silently misses most of the app. Target the
+   structural pattern instead (any button inside a .pull-right, inside a
+   table cell) so this applies everywhere regardless of naming. */
+table.dataTable td .pull-right .btn,
+table.dataTable td .pull-right button{
+  display:inline-block !important;
+  padding:5px 8px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  margin:2px 2px 2px 0 !important;
+  min-width:0 !important;
+  box-shadow:none !important;
+}
+table.dataTable td .pull-right .fa{
+  margin-right:0 !important;
+}
+table.dataTable td .pull-right .btn-primary{
+  background-color:var(--bc-info-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-steel) !important;
+}
+table.dataTable td .pull-right .btn-primary:hover{
+  background-color:var(--bc-steel) !important;
+  color:#fff !important;
+}
+table.dataTable td .pull-right .btn-danger{
+  background-color:var(--bc-danger-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-danger-text) !important;
+}
+table.dataTable td .pull-right .btn-danger:hover{
+  background-color:#C0503F !important;
+  color:#fff !important;
+}
+table.dataTable td .pull-right .btn-warning{
+  background-color:var(--bc-warning-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-warning-text) !important;
+}
+table.dataTable td .pull-right .btn-warning:hover{
+  background-color:var(--bc-amber) !important;
+  color:var(--bc-navy) !important;
+}
+
+/* Plain (non-DataTables) tables elsewhere in the app — Dashboard's Recent
+   Campaigns, Sending Profiles' custom-headers list, Templates'
+   attachments list. None of these have a .dataTables_wrapper to rely on,
+   so the table element itself gets the equivalent card treatment. */
+.modal-body table.table,
+.main table.table:not(.dataTable){
+  background:#fff !important;
+  border:none !important;
+  box-shadow:0 1px 3px rgba(11,37,69,0.08) !important;
+  border-radius:10px !important;
+  overflow:hidden;
+  margin-top:12px;
+}
+.modal-body table.table thead th,
+.main table.table:not(.dataTable) thead th{
+  background-color:var(--bc-sidebar) !important;
+  color:#fff !important;
+  border-bottom:none !important;
+}
+.modal-body table.table tbody td,
+.main table.table:not(.dataTable) tbody td{
+  border-top:1px solid var(--bc-border) !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd){
+  background-color:var(--bc-surface) !important;
+}
+
+/* Plaintext template/email editor (the "Text" tab in Email Templates —
+   the "HTML" tab is CKEditor and renders in an iframe we structurally
+   cannot style from here). */
+textarea.gophish-editor{
+  font-family:'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+  font-size:13px !important;
+  min-height:180px !important;
+  border-radius:7px !important;
+  border:1px solid var(--bc-border) !important;
+  padding:12px !important;
+}
+textarea.gophish-editor:focus{
+  border-color:var(--bc-steel) !important;
+  box-shadow:0 0 0 3px rgba(24,95,165,0.12) !important;
+  outline:none;
+}
+
+.text-muted{
+  color:var(--bc-mute) !important;
+}
+.dataTables_wrapper .pagination > li > a{
+  color:var(--bc-steel) !important;
+  border-radius:6px !important;
+}
+.dataTables_wrapper .pagination > .active > a{
+  background-color:var(--bc-info-bg) !important;
+  border-color:transparent !important;
+  color:var(--bc-steel) !important;
+  font-weight:700 !important;
+}
+
+/* Dashboard's "Recent Campaigns" table is a plain Bootstrap .table, not
+   DataTables-enhanced — no .dataTables_wrapper exists around it, so it
+   needs its own dedicated rule rather than inheriting the card wrapper. */
+#campaignTable{
+  background:#fff !important;
+  border:none !important;
+  box-shadow:0 1px 3px rgba(11,37,69,0.08) !important;
+  border-radius:10px !important;
+  overflow:hidden;
+}
+#campaignTable thead th{
+  background-color:var(--bc-sidebar) !important;
+  color:#fff !important;
+  border-bottom:none !important;
+}
+#campaignTable tbody td{
+  border-top:1px solid var(--bc-border) !important;
+}
+#campaignTable tbody tr:hover{
+  background-color:var(--bc-surface) !important;
+}
+
+/* Alerts (empty-state messages, flash notices) — soft pastel fills,
+   matching the badge treatment, instead of Bootstrap's legacy look. */
+.alert{
+  border:none !important;
+  border-radius:10px !important;
+  padding:16px 20px !important;
+  font-size:13.5px !important;
+}
+.alert-info{
+  background-color:var(--bc-info-bg) !important;
+  color:var(--bc-info-text) !important;
+}
+.alert-success{
+  background-color:var(--bc-success-bg) !important;
+  color:var(--bc-success-text) !important;
+}
+.alert-warning{
+  background-color:var(--bc-warning-bg) !important;
+  color:var(--bc-warning-text) !important;
+}
+.alert-danger{
+  background-color:var(--bc-danger-bg) !important;
+  color:var(--bc-danger-text) !important;
+}

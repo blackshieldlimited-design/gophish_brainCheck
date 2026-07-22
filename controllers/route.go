@@ -185,6 +185,7 @@ type themeParams struct {
 	SidebarColor template.CSS
 	FontFamily   template.CSS
 	LogoURL      string
+	BrandName    string
 }
 
 func currentThemeParams() themeParams {
@@ -194,6 +195,7 @@ func currentThemeParams() themeParams {
 		SidebarColor: template.CSS(t.SidebarColor),
 		FontFamily:   template.CSS(t.FontFamily),
 		LogoURL:      t.LogoURL,
+		BrandName:    t.BrandName,
 	}
 }
 
