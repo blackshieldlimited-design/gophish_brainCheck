@@ -13,6 +13,8 @@
 .navbar-logo {
     margin: 4px 0px;
     float: left;
+    max-height: 32px;
+    width: auto;
 }
 
 /* Driven by --primary-color/--sidebar-color/--font-family, set from the
