@@ -172,6 +172,31 @@ func (as *AdminServer) registerRoutes() {
 	as.server.Handler = adminHandler
 }
 
+// themeParams holds the admin theme values used in templates. PrimaryColor,
+// SidebarColor, and FontFamily are template.CSS rather than plain strings so
+// Go's html/template contextual autoescaper treats them as trusted CSS
+// property values instead of running them through its untrusted-CSS-value
+// filter, which mangles otherwise-valid values like quoted font-family
+// fallback lists (e.g. "'Roboto', sans-serif") into "ZgotmplZ". This is safe
+// because Theme values only ever come from the server's own config.json, not
+// user input.
+type themeParams struct {
+	PrimaryColor template.CSS
+	SidebarColor template.CSS
+	FontFamily   template.CSS
+	LogoURL      string
+}
+
+func currentThemeParams() themeParams {
+	t := config.CurrentTheme
+	return themeParams{
+		PrimaryColor: template.CSS(t.PrimaryColor),
+		SidebarColor: template.CSS(t.SidebarColor),
+		FontFamily:   template.CSS(t.FontFamily),
+		LogoURL:      t.LogoURL,
+	}
+}
+
 type templateParams struct {
 	Title        string
 	Flashes      []interface{}
@@ -179,7 +204,7 @@ type templateParams struct {
 	Token        string
 	Version      string
 	ModifySystem bool
-	Theme        config.Theme
+	Theme        themeParams
 }
 
 // newTemplateParams returns the default template parameters for a user and
@@ -194,7 +219,7 @@ func newTemplateParams(r *http.Request) templateParams {
 		ModifySystem: modifySystem,
 		Version:      config.Version,
 		Flashes:      session.Flashes(),
-		Theme:        config.CurrentTheme,
+		Theme:        currentThemeParams(),
 	}
 }
 
@@ -316,8 +341,8 @@ func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request
 		Title   string
 		Flashes []interface{}
 		Token   string
-		Theme   config.Theme
-	}{Title: "Login", Token: csrf.Token(r), Theme: config.CurrentTheme}
+		Theme   themeParams
+	}{Title: "Login", Token: csrf.Token(r), Theme: currentThemeParams()}
 	params.Flashes = session.Flashes()
 	session.Save(r, w)
 	templates := template.New("template")
@@ -363,8 +388,8 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		Title   string
 		Flashes []interface{}
 		Token   string
-		Theme   config.Theme
-	}{Title: "Login", Token: csrf.Token(r), Theme: config.CurrentTheme}
+		Theme   themeParams
+	}{Title: "Login", Token: csrf.Token(r), Theme: currentThemeParams()}
 	session := ctx.Get(r, "session").(*sessions.Session)
 	switch {
 	case r.Method == "GET":
